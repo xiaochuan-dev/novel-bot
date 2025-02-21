@@ -1,3 +1,31 @@
+async function sendMessage(env: Env, chatId: any, message: string) {
+	// @ts-ignore
+	const telegram_token = env.TELEGRAM_TOKEN;
+    const url = `https://api.telegram.org/bot${telegram_token}/sendMessage`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: message,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('消息发送成功:', data);
+    } catch (error) {
+        console.error('发送消息时出错:', error);
+    }
+}
+
 async function startAction({ url, env, chatId }: { url: string; env: Env; chatId?: string }) {
 	const fUrl = 'https://api.github.com/repos/xiaochuan-dev/novel-bot/dispatches';
 
@@ -62,6 +90,8 @@ export default {
 
 				if (t === '/query') {
 					const res = await queryStatus(env);
+					const chatId = requestBody.message.chat.id;
+					await sendMessage(env, chatId, res);
 					return new Response(res);
 				}
 
