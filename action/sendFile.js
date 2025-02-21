@@ -1,5 +1,6 @@
 const FormData = require('form-data');
 const { join } = require('path');
+const fs = require('fs');
 
 const token = process.env.TELEGRAM_TOKEN;
 
