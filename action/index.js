@@ -3,18 +3,31 @@ const { parseCatalog, parseContent } = require('x-novel-parse');
 const pLimit = require('p-limit');
 const { writeFile } = require('fs/promises');
 const path = require('path');
+const http = require('http');
+const https = require('https');
+
+const axios = require('axios');
+
+const httpAgent = new http.Agent({ keepAlive: true });
+const httpsAgent = new https.Agent({ keepAlive: true });
+
+const axiosInstance = axios.create({
+  httpAgent,
+  httpsAgent,
+});
 
 const limit = pLimit(1);
 
 async function getText(url) {
-  const res = await fetch(url, {
+  const res = await axiosInstance.get(url, {
+    responseType: 'arraybuffer',
     headers: {
       'user-agent':
         'Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36',
     },
   });
 
-  const arrayBuffer = await res.arrayBuffer();
+  const arrayBuffer = res.data;
   const decoder = new TextDecoder('utf-8');
   let domText = decoder.decode(arrayBuffer);
 
