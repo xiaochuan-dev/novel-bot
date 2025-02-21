@@ -37,6 +37,7 @@ async function getDom(url) {
 
 async function start() {
   const url = process.argv[2];
+  const catalogUrl = url;
 
   const { document } = getDom(url);
   global.location = new URL(catalogUrl);
