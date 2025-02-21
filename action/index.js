@@ -22,7 +22,7 @@ async function getText(url) {
 
 async function getDom(url) {
   const text = await getText(url);
-  console.log(text);
+
   const dom = new JSDOM(text, {
     url,
   });
@@ -39,10 +39,8 @@ async function start() {
   const url = process.argv[2];
   const catalogUrl = url;
 
-  const { document } = getDom(catalogUrl);
+  const { document } = await getDom(catalogUrl);
 
-
-  console.log(document);
   global.location = new URL(catalogUrl);
   const res = parseCatalog(document);
   global.location = null;
