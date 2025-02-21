@@ -24,6 +24,10 @@ jobs:
           echo "Parameter 1: ${{ github.event.client_payload.url }}"
           echo "Parameter 1: ${{ github.event.client_payload.chatId }}"
           node index.js ${{ github.event.client_payload.url }} ${{ github.event.client_payload.chatId }}
+
+      - name: Send File
+        run: |
+          cd action
           node sendFile.js ${{ github.event.client_payload.url }} ${{ github.event.client_payload.chatId }}
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
