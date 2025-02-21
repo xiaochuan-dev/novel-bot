@@ -1,0 +1,24 @@
+name: run
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [trigger_event]
+jobs:
+  run:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+      - run: npm i -g pnpm@9.12.2
+      - run: pnpm i
+      - name: Run
+        run: |
+          cd action
+          echo "Parameter 1: ${{ github.event.client_payload.url }}"
