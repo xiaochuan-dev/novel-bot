@@ -16,6 +16,9 @@ async function sendFile(filepath, chatId, rawurl) {
     const response = await fetch(url, {
       method: 'POST',
       body: formData,
+      headers: {
+        ...formData.getHeaders(),
+      }
     });
 
     if (!response.ok) {
