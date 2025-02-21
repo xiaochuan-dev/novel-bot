@@ -39,7 +39,10 @@ async function start() {
   const url = process.argv[2];
   const catalogUrl = url;
 
-  const { document } = getDom(url);
+  const { document } = getDom(catalogUrl);
+
+
+  console.log(document);
   global.location = new URL(catalogUrl);
   const res = parseCatalog(document);
   global.location = null;
