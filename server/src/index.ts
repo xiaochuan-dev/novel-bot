@@ -30,7 +30,9 @@ export default {
 
 		switch (url.pathname) {
 			case '/start': {
-				const urlParam = url.searchParams.get('url');
+				const urlParam = url.searchParams.get('url')!;
+
+				await startAction(urlParam, env);
 
 				break;
 			}
