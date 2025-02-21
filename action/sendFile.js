@@ -1,9 +1,9 @@
 const FormData = require('form-data');
 const { join } = require('path');
 const fs = require('fs');
+const axios = require('axios');
 
 const token = process.env.TELEGRAM_TOKEN;
-console.log(token);
 
 async function sendFile(filepath, chatId, rawurl) {
   const url = `https://api.telegram.org/bot${token}/sendDocument`;
@@ -13,15 +13,13 @@ async function sendFile(filepath, chatId, rawurl) {
   formData.append('document', fs.createReadStream(filepath));
   formData.append('caption', `${rawurl}下载完成`);
 
-  const response = await fetch(url, {
-    method: 'POST',
-    body: formData,
+  const response = await axios.post(url, formData, {
     headers: {
       ...formData.getHeaders(),
     },
   });
 
-  const data = await response.text();
+  const data = response.data;
   console.log('文件发送成功:', data);
 }
 
