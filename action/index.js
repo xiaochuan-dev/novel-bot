@@ -22,7 +22,7 @@ async function getText(url) {
 
 async function getDom(url) {
   const text = await getText(url);
-
+  console.log(text);
   const dom = new JSDOM(text, {
     url,
   });
