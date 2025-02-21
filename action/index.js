@@ -77,7 +77,13 @@ async function start() {
   const catalogList = await getCatalog(url);
 
   const ps = catalogList.map(async({ name, url }) => {
-    return limit(async() => await getContent(name, url));
+    return limit(async() => {
+      const res = await getContent(name, url);
+
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      return res;
+    });
   });
 
   const texts = await Promise.all(ps);
