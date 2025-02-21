@@ -1,5 +1,5 @@
 async function startAction(url: string, env: Env) {
-	const fUrl = 'https://api.github.com/repos/OWNER/REPO/dispatches';
+	const fUrl = "https://api.github.com/repos/xiaochuan-dev/novel-bot/dispatches";
 
 	// @ts-ignore
 	const token = env.GITHUB_ACCESS_TOKEN;
@@ -15,12 +15,12 @@ async function startAction(url: string, env: Env) {
 		method: 'POST',
 		body: JSON.stringify(data),
 		headers: {
-			'Authorization': `token ${token}`,
+			'Authorization': `Bearer ${token}`,
 			'Accept': 'application/vnd.github.v3+json',
 		}
 	});
 
-	const res = await r.json();
+	const res = await r.text();
 	return res;
 }
 
