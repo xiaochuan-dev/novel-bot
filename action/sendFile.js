@@ -34,7 +34,7 @@ async function sendFile(filepath, chatId, rawurl) {
 
 async function start() {
   const url = process.argv[2];
-  const chatId = process.argv[3];
+  const chatId = parseInt(process.argv[3]);
   await sendFile(join(__dirname, 'out.txt'), chatId, url);
 }
 
