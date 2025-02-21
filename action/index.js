@@ -80,7 +80,7 @@ async function start() {
     return limit(async() => {
       const res = await getContent(name, url);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       return res;
     });
