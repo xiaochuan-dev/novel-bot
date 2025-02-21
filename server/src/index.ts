@@ -57,8 +57,8 @@ async function startAction({ url, env, chatId }: { url: string; env: Env; chatId
 async function queryStatus(env: Env): Promise<string> {
 	// @ts-ignore
 	const token = env.GITHUB_ACCESS_TOKEN;
-	const url = `https://api.github.com/repos/xiaochuan-dev/novel-bot/actions/runs?status=in_progress`;
-	const r = await fetch(url, {
+	const url1 = `https://api.github.com/repos/xiaochuan-dev/novel-bot/actions/runs?status=queued`;
+	const r1 = await fetch(url1, {
 		method: 'GET',
 		headers: {
 			Authorization: `Bearer ${token}`,
@@ -66,10 +66,25 @@ async function queryStatus(env: Env): Promise<string> {
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
 		},
 	});
+	const res1: any = await r1.json();
 
-	const res: any = await r.json();
-	if (res.total_count > 0) {
-		return `${res.total_count}个任务正在运行`;
+	const s1 = `${res1.total_count}个任务正在等待运行\n`;
+
+	const url2 = `https://api.github.com/repos/xiaochuan-dev/novel-bot/actions/runs?status=in_progress`;
+	const r2 = await fetch(url2, {
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${token}`,
+			Accept: 'application/vnd.github.v3+json',
+			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
+		},
+	});
+	const res2: any = await r2.json();
+	const s2 = `${res2.total_count}个任务正在运行\n`;
+
+
+	if (res1.total_count > 0 || res2.total_count > 0) {
+		return `${s1}${s2}`;
 	} else {
 		return `无任务正在运行`;
 	}
