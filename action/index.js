@@ -4,7 +4,7 @@ const pLimit = require('p-limit');
 const { writeFile } = require('fs/promises');
 const path = require('path');
 
-const limit = pLimit(2);
+const limit = pLimit(1);
 
 async function getText(url) {
   const res = await fetch(url, {
