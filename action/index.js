@@ -1,5 +1,10 @@
 const { JSDOM } = require('jsdom');
 const { parseCatalog, parseContent } = require('x-novel-parse');
+const pLimit = require('p-limit');
+const { writeFile } = require('fs/promises');
+const path = require('path');
+
+const limit = pLimit(4);
 
 async function getText(url) {
   const res = await fetch(url, {
@@ -35,17 +40,39 @@ async function getDom(url) {
   };
 }
 
-async function start() {
-  const url = process.argv[2];
-  const catalogUrl = url;
-
-  const { document } = await getDom(catalogUrl);
-
-  global.location = new URL(catalogUrl);
+async function getCatalog(url) {
+  const { document } = await getDom(url);
+  global.location = new URL(url);
   const res = parseCatalog(document);
   global.location = null;
+  return res;
+}
 
-  console.log(res);
+async function getContent(name, url) {
+  const { document } = await getDom(url);
+  global.location = new URL(url);
+  const { trimText } = parseContent(document);
+  global.location = null;
+
+  console.log(`${url} done`);
+  return `${name}\n${trimText}\n`;
+}
+
+async function start() {
+  const url = process.argv[2];
+  
+  const catalogList = await getCatalog(url);
+
+  const ps = catalogList.map(async({ name, url }) => {
+    return limit(async() => await getContent(name, url));
+  });
+
+  const texts = await Promise.all(ps);
+  const t = texts.join('');
+
+  await writeFile(path.join(__dirname, 'out.txt'), t, 'utf-8');
+  console.log(`写入成功`);
+
 }
 
 start();
