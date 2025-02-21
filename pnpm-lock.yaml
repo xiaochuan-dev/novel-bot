@@ -23,8 +23,8 @@ importers:
         specifier: 3.1.0
         version: 3.1.0
       x-novel-parse:
-        specifier: ^0.0.7
-        version: 0.0.7
+        specifier: ^0.0.8
+        version: 0.0.8
 
   server:
     devDependencies:
@@ -1307,8 +1307,8 @@ packages:
       utf-8-validate:
         optional: true
 
-  x-novel-parse@0.0.7:
-    resolution: {integrity: sha512-h4SWJaILaCNaHydVK3lO/zHwwXStjba9bE9Lpt+YtzWb8lNjMyY8yn8/HsC2w006a3mKfeQ83zyGSMbluFxR7g==}
+  x-novel-parse@0.0.8:
+    resolution: {integrity: sha512-15MZQWeK0ohdsSUML0N8aALLO8a5IIgP3+hlSmiCW02u6PYTf9CV8YyLECiDmvPIhwrNZp3bqidq+HWS9fHuKw==}
 
   xml-name-validator@5.0.0:
     resolution: {integrity: sha512-EvGK8EJ3DhaHfbRlETOWAS5pO9MZITeauHKJyb8wyajUfQUenkIg2MvLDTZ4T/TgIcm3HU0TFBgWWboAZ30UHg==}
@@ -2442,7 +2442,7 @@ snapshots:
 
   ws@8.18.0: {}
 
-  x-novel-parse@0.0.7: {}
+  x-novel-parse@0.0.8: {}
 
   xml-name-validator@5.0.0: {}
 

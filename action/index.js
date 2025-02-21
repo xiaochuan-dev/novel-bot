@@ -73,10 +73,6 @@ async function getContent(name, url) {
 
 async function start() {
   const url = process.argv[2];
-
-  global.Node = {};
-  global.Node.TEXT_NODE = 3;
-  global.Node.ELEMENT_NODE = 1;
   
   const catalogList = await getCatalog(url);
 
