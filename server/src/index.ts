@@ -1,4 +1,4 @@
-async function startAction(url: string, env: Env) {
+async function startAction({ url, env, chatId }: { url: string; env: Env; chatId?: string }) {
 	const fUrl = 'https://api.github.com/repos/xiaochuan-dev/novel-bot/dispatches';
 
 	// @ts-ignore
@@ -8,6 +8,7 @@ async function startAction(url: string, env: Env) {
 		event_type: 'trigger_event',
 		client_payload: {
 			url,
+			chatId
 		},
 	};
 
@@ -25,6 +26,27 @@ async function startAction(url: string, env: Env) {
 	return res;
 }
 
+async function queryStatus(env: Env): Promise<string> {
+	// @ts-ignore
+	const token = env.GITHUB_ACCESS_TOKEN;
+	const url = `https://api.github.com/repos/xiaochuan-dev/novel-bot/actions/runs?status=in_progress`;
+	const r = await fetch(url, {
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${token}`,
+			Accept: 'application/vnd.github.v3+json',
+			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
+		},
+	});
+
+	const res: any = await r.json();
+	if (res.total_count > 0) {
+		return `${res.total_count}个任务正在运行`;
+	} else {
+		return `无任务正在运行`;
+	}
+}
+
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
 		const url = new URL(request.url);
@@ -32,10 +54,24 @@ export default {
 		const telegram_token = env.TELEGRAM_TOKEN;
 
 		switch (url.pathname) {
-
 			case `/webhook/${telegram_token}`: {
-				const requestBody = await request.json();
+				const requestBody: any = await request.json();
 				console.log(requestBody);
+
+				const t: string = requestBody.message.text;
+
+				if (t === '/query') {
+					const res = await queryStatus(env);
+					return new Response(res);
+				}
+
+				if (t.startsWith('http')) {
+					const chatId = requestBody.message.chat.id;
+					await startAction({ url: t, env, chatId });
+					return new Response('开始爬取');
+				} else {
+					return new Response('url有误');
+				}
 
 				break;
 			}
@@ -43,7 +79,7 @@ export default {
 			case '/start': {
 				if (request.method === 'GET') {
 					const urlParam = url.searchParams.get('url')!;
-					const res = await startAction(urlParam, env);
+					const res = await startAction({ url: urlParam, env });
 					console.log(res);
 				}
 				if (request.method === 'POST') {
