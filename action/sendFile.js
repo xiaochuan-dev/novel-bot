@@ -12,24 +12,16 @@ async function sendFile(filepath, chatId, rawurl) {
   formData.append('document', fs.createReadStream(filepath));
   formData.append('caption', `${rawurl}下载完成`);
 
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      body: formData,
-      headers: {
-        ...formData.getHeaders(),
-      }
-    });
+  const response = await fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      ...formData.getHeaders(),
+    },
+  });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    console.log('文件发送成功:', data);
-  } catch (error) {
-    console.error('发送文件时出错:', error);
-  }
+  const data = await response.json();
+  console.log('文件发送成功:', data);
 }
 
 async function start() {
