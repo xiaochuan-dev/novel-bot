@@ -20,7 +20,7 @@ async function sendFile(filepath, chatId, rawurl) {
     },
   });
 
-  const data = await response.json();
+  const data = await response.text();
   console.log('文件发送成功:', data);
 }
 
