@@ -3,6 +3,7 @@ const { join } = require('path');
 const fs = require('fs');
 
 const token = process.env.TELEGRAM_TOKEN;
+console.log(token);
 
 async function sendFile(filepath, chatId, rawurl) {
   const url = `https://api.telegram.org/bot${token}/sendDocument`;
