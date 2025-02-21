@@ -32,7 +32,8 @@ export default {
 			case '/start': {
 				const urlParam = url.searchParams.get('url')!;
 
-				await startAction(urlParam, env);
+				const res = await startAction(urlParam, env);
+				console.log(res);
 
 				break;
 			}
